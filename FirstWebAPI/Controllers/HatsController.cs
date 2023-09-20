@@ -53,10 +53,13 @@ namespace FirstWebAPI.Controllers
         {
             var toBeDeleted = Hats.Find((eachHat) => eachHat.ProductId == id);
 
-            if (id == 0)
+            if (id == null)
             {
-                toBeDeleted = hat;
+                return;
             }
+
+            Hats.Remove(toBeDeleted);
+            return;
         }
     }
 }
