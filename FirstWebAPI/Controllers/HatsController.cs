@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using FirstWebAPI.Models;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
 namespace FirstWebAPI.Controllers
@@ -7,11 +8,13 @@ namespace FirstWebAPI.Controllers
     [ApiController]
     public class HatsControllers : ControllerBase
     {
+
         public static List<Hats> Hats = new List<Hats>
         {
             new Hats {ProductName = "Sinamay Hats", ProductId = 1, Category = "Church Hat", Price = "$20", Size = "XL" },
             new Hats {ProductName = "Second Hats", ProductId = 2, Category = "Church Hat", Price = "$20", Size = "XXL" }
         };
+
         [HttpGet]
         public IEnumerable<Hats> GetHats()
         {
@@ -24,6 +27,36 @@ namespace FirstWebAPI.Controllers
             Hats.Add(new Hats { Price = price, Size = size, ProductId = Hats.Count + 1, Category = category, ProductName = productName });
 
             return Ok(Hats);
+        }
+
+        [HttpPut("{id}")]
+        public void UpdateHat(int id, [FromBody] Hats hat)
+        {
+            var toBeUpdated = Hats.Find((eachHat)=> eachHat.ProductId == id);
+
+            if (toBeUpdated == null)
+            {
+                return;
+            }
+
+            toBeUpdated.ProductName = hat.ProductName;
+            toBeUpdated.Category = hat.Category;
+            toBeUpdated.Size = hat.Size;
+            toBeUpdated.Price = hat.Price;
+
+            return;
+            
+        }
+        
+        [HttpDelete]
+        public void DeleteHat(int id, [FromBody] Hats hat) 
+        {
+            var toBeDeleted = Hats.Find((eachHat) => eachHat.ProductId == id);
+
+            if (id == 0)
+            {
+                toBeDeleted = hat;
+            }
         }
     }
 }
