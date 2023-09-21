@@ -30,13 +30,13 @@ namespace FirstWebAPI.Controllers
         }
 
         [HttpPut("{id}")]
-        public void UpdateHat(int id, [FromBody] Hats hat)
+        public IActionResult UpdateHat(int id, [FromBody] Hats hat)
         {
             var toBeUpdated = Hats.Find((eachHat)=> eachHat.ProductId == id);
 
             if (toBeUpdated == null)
             {
-                return;
+                return NotFound();
             }
 
             toBeUpdated.ProductName = hat.ProductName;
@@ -44,22 +44,22 @@ namespace FirstWebAPI.Controllers
             toBeUpdated.Size = hat.Size;
             toBeUpdated.Price = hat.Price;
 
-            return;
+            return Ok(toBeUpdated);
             
         }
         
         [HttpDelete]
-        public void DeleteHat(int id, [FromBody] Hats hat) 
+        public IActionResult DeleteHat(int id, [FromBody] Hats hat) 
         {
             var toBeDeleted = Hats.Find((eachHat) => eachHat.ProductId == id);
 
             if (id == null)
             {
-                return;
+                return NotFound("Hat not found!");
             }
 
             Hats.Remove(toBeDeleted);
-            return;
+            return Ok("Successfully Deleted!");
         }
     }
 }
